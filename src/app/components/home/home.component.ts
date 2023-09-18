@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
 import { ProductModel } from 'src/app/models/products.model';
 import { BasketService } from 'src/app/services/basket.service';
 import { environment } from 'src/environments/environments';
@@ -11,12 +12,16 @@ import { environment } from 'src/environments/environments';
 })
 export class HomeComponent implements OnInit {
   
+  @ViewChild('exampleModal') exampleModal: any;
+
+
   api: string = environment.api;
   product: ProductModel = new ProductModel();
   products: ProductModel[] = [
   ]
   
   constructor(
+    private _router: Router,
     private _http: HttpClient,
     private _basket: BasketService
   ) { }
@@ -37,10 +42,12 @@ export class HomeComponent implements OnInit {
       next: (res) => {
         this.urunListesiGetir();
         this.product = new ProductModel ();
+        
       },
       error: (err) => console.log(err)
     })
-
+    this.exampleModal.nativeElement.style.display = 'none'; // Modalı gizleme
+    document.body.classList.remove('modal-open');
   }
 
   sepeteUrunEkle(model: ProductModel) {
@@ -59,6 +66,7 @@ export class HomeComponent implements OnInit {
       error: (err) => console.log(err)
       })
   }
+
 
 
 }
